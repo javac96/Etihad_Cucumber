@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<extentreports>
+    <configuration>
+        <encoding>UTF-8</encoding>
+        <documentTitle>Etihad Airways Automation</documentTitle>
+        <reportName>Flight Search Automation</reportName>
+        <reportHeadline>Etihad Flight Search</reportHeadline>
+    </configuration>
+</extentreports>
