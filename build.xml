@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE project [
+]>
+
+<project name="Etihad" default="usage" basedir=".">
+
+	<property name="ws.home" value="${basedir}" />
+	<property name="ws.jars" value="${ws.home}/lib" />
+	<property name="test.dest" value="${ws.home}/build" />
+	<property name="test.src" value="${ws.home}/src" />
+
+
+	<path id="testcase.path">
+		<pathelement location="${test.dest}" />
+		<fileset dir="${ws.jars}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="setClassPath" unless="test.classpath">
+		<path id="classpath_jars">
+			<fileset dir="${ws.jars}" includes="*.jar" />
+		</path>
+		<pathconvert pathsep=":" property="test.classpath" refid="classpath_jars" />
+	</target>
+
+	<target name="init" depends="setClassPath">
+		<tstamp>
+			<format property="start.time" pattern="MM/dd/yyyy hh:mm aa" />
+		</tstamp>
+		<condition property="ANT" value="${env.ANT_HOME}/bin/ant.bat" else="${env.ANT_HOME}/bin/ant">
+			<os family="windows" />
+		</condition>
+
+	</target>
+
+	<!-- clean -->
+	<target name="clean">
+		<delete dir="${test.dest}" />
+	</target>
+
+	<!-- compile -->
+	<target name="compile" depends="clean">
+		<mkdir dir="${test.dest}" />
+		<javac srcdir="${test.src}" destdir="${test.dest}" classpathref="testcase.path" includeantruntime="false" />
+		<!--  <copy file="src/log4j.properties" todir="build/"/>  -->
+	</target>
+
+	<!-- build -->
+	<target name="build" depends="init">
+	</target>
+
+
+	<target name="usage">
+		<echo>
+            ant run will execute the test
+        </echo>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit printsummary="on" haltonfailure="yes" fork="true">
+			<classpath>
+				<path refid="testcase.path" />
+				<pathelement location="${test.dest}" />
+			</classpath>
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${test.src}" includes="**/*Runner.java" />
+
+			</batchtest>
+		</junit>
+	</target>
+
+</project>
